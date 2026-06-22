@@ -9,16 +9,15 @@
 
 ## ✨ Features
 
-- **13+ Format Support** — Read and write CSV, TSV, Excel, JSON, JSONL, Parquet, Feather, ORC, XML, YAML, SQLite, HDF5, and Avro
-- **Any-to-Any Conversion** — Convert between any pair of supported formats
-- **Instant Preview** — See schema, column types, and first 5 rows before downloading
-- **Drag & Drop Upload** — Simply drop your dataset file into the browser
-- **Async Processing** — Background thread pool for non-blocking conversions
-- **Conversion History** — Track your recent conversions (persisted in browser)
-- **Premium Dark UI** — Glassmorphism design with smooth animations
-- **Keyboard Shortcuts** — `Ctrl+U` to upload, `Escape` to reset
-- **Auto-Detection** — Automatically detects input format from file extension
-- **Up to 500 MB** — Handle large datasets
+- **13+ Format Support** — Read and write CSV, TSV, Excel, JSON, JSONL, Parquet, Feather, ORC, XML, YAML, SQLite, HDF5, and Avro.
+- **Any-to-Any Conversion** — Convert between any pair of supported formats.
+- **Premium Dark UI** — Fully responsive, modern Next.js + React frontend with glassmorphism design and smooth micro-animations.
+- **Instant Preview** — See schema, column types, and the first 5 rows before downloading.
+- **Drag & Drop Upload** — Simply drop your dataset file into the browser.
+- **Async Processing** — Background thread pool on the Flask backend for non-blocking large dataset conversions.
+- **Auto-Detection** — Automatically detects input format from the file extension.
+- **Decoupled Architecture** — Clean separation of concerns between the robust Python Pandas backend and the Next.js React frontend.
+- **Up to 500 MB** — Handle large datasets efficiently.
 
 ## 📊 Supported Formats
 
@@ -38,33 +37,71 @@
 | HDF5 | `.h5`, `.hdf5` | Scientific | ✅ | ✅ |
 | Avro | `.avro` | Columnar | ✅ | ✅ |
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Local Development)
+
+Because DataForge uses a decoupled architecture, you need to run both the Python backend and the Next.js frontend concurrently.
 
 ### Prerequisites
-- Python 3.10+
-- pip
+- **Python 3.10+** (Backend)
+- **Node.js 18+** (Frontend)
 
-### Installation
+### 1. Start the Flask Backend (Port 5000)
 
 ```bash
 # Clone the repository
 git clone https://github.com/sadikworkbd5622/dataset-file-convertor.git
 cd dataset-file-convertor
 
-# Create virtual environment
+# Create and activate virtual environment
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Start the server
+# Start the API server
 python app.py
 ```
 
-Open **http://localhost:5000** in your browser.
+### 2. Start the Next.js Frontend (Port 3000)
+
+Open a new terminal window:
+
+```bash
+cd dataset-file-convertor/frontend
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+Open **http://localhost:3000** in your browser to use DataForge!
+
+---
+
+## 🌍 Deployment
+
+DataForge is fully configured for production deployment. The recommended stack is **Render** for the Python backend and **Vercel** for the Next.js frontend.
+
+### Deploying Backend (Render)
+1. Create a new **Web Service** on Render and connect your GitHub repo.
+2. Set the Environment to `Python 3`.
+3. Build Command: `pip install -r requirements.txt`
+4. Start Command: `gunicorn app:app`
+
+### Deploying Frontend (Vercel)
+1. Import your GitHub project into Vercel.
+2. Under "Build & Development Settings", ensure the **Framework Preset** is set to **Next.js**.
+3. **Important:** Change the **Root Directory** to `frontend`.
+4. Deploy! Your Next.js app will automatically route requests to the production Render URL.
+
+---
 
 ## 🔌 API Documentation
+
+The backend exposes a clean REST API at `http://127.0.0.1:5000/api/*`.
 
 ### `GET /api/formats`
 Returns all supported formats with availability status.
@@ -92,7 +129,7 @@ Upload a file for conversion.
 ```
 
 ### `GET /api/status/<task_id>`
-Check conversion progress.
+Check conversion progress via polling.
 
 ### `GET /api/download/<job_id>?name=filename.json`
 Download the converted file.
@@ -102,29 +139,29 @@ Get recent conversion history.
 
 ## 🧪 Testing
 
+The backend includes a comprehensive pytest suite to test the conversion engine logic:
+
 ```bash
 python -m pytest tests/ -v
 ```
 
-## 🏗️ Project Structure
+## 🏗️ Architecture
 
-```
+```text
 converter/
-├── app.py                    # Flask application & routes
+├── app.py                    # Flask REST API endpoints
 ├── config.py                 # Configuration
 ├── requirements.txt          # Python dependencies
-├── services/
-│   ├── converter.py          # Universal conversion engine
-│   └── formats.py            # Format registry & metadata
-├── utils/
-│   └── serializers.py        # JSON serialization helpers
-├── static/
-│   ├── style.css             # Premium dark theme CSS
-│   └── app.js                # Client-side JavaScript
-├── templates/
-│   └── index.html            # Main HTML template
-└── tests/
-    └── test_converter.py     # Test suite
+├── services/                 # Python logic (Pandas converter, formats)
+├── tests/                    # Pytest test suite
+│
+└── frontend/                 # Next.js Application
+    ├── package.json
+    ├── next.config.mjs       # Proxy routing (local 5000 -> production Render)
+    └── src/
+        ├── app/              # Next.js App Router (page.js, layout.js, globals.css)
+        ├── components/       # Reusable React UI components
+        └── lib/              # Client-side API fetchers and utils
 ```
 
 ## 📝 License
@@ -134,5 +171,5 @@ MIT License
 ---
 
 <p align="center">
-  Built with ❤️ using Flask + Pandas
+  Built with ❤️ using <strong>Next.js</strong>, <strong>React</strong>, <strong>Flask</strong>, and <strong>Pandas</strong>
 </p>

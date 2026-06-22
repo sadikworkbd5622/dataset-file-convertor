@@ -272,6 +272,8 @@ code, pre {
 
 /* ── Format Selector ── */
 .format-selector {
+  position: relative;
+  z-index: 10;
   margin-bottom: 24px;
   animation: fadeInUp .6s .35s var(--ease) both;
 }

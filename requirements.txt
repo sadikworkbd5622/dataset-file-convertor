@@ -11,5 +11,8 @@ pyyaml>=6.0.0
 fastavro>=1.9.0
 # tables>=3.9.0  # Optional: requires system HDF5 headers (brew install hdf5)
 
+# Production Server
+gunicorn>=21.0.0
+
 # Testing
 pytest>=8.0.0

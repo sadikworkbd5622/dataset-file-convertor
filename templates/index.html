@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parquet → JSON Converter</title>
+    <meta name="description" content="Convert Apache Parquet files to properly formatted JSON with instant preview and download.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow--1"></div>
+    <div class="bg-glow bg-glow--2"></div>
+    <div class="bg-glow bg-glow--3"></div>
+
+    <main class="container">
+        <!-- Header -->
+        <header class="header" id="header">
+            <div class="header__badge">
+                <span class="header__icon">⚡</span>
+                <span>Instant Conversion</span>
+            </div>
+            <h1 class="header__title">
+                <span class="header__title-parquet">.parquet</span>
+                <span class="header__arrow">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </span>
+                <span class="header__title-json">.json</span>
+            </h1>
+            <p class="header__subtitle">Drop your Parquet file and get a properly formatted JSON — columns, types, and data preserved perfectly.</p>
+        </header>
+
+        <!-- Upload Zone -->
+        <section class="upload-zone" id="uploadZone" tabindex="0" role="button" aria-label="Upload parquet file">
+            <div class="upload-zone__content" id="uploadContent">
+                <div class="upload-zone__icon">
+                    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                </div>
+                <h2 class="upload-zone__title">Drop your <code>.parquet</code> file here</h2>
+                <p class="upload-zone__hint">or click to browse · up to 500 MB</p>
+                <div class="upload-options" style="margin-top: 1.5rem;" onclick="event.stopPropagation();">
+                    <label style="cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">
+                        <input type="checkbox" id="analyzeCheckbox" name="analyze" value="true" style="accent-color: var(--primary);">
+                        Analyze with Gemini AI (Identify Subject & Chapter)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Progress state -->
+            <div class="upload-zone__progress hidden" id="uploadProgress">
+                <div class="spinner" id="spinner"></div>
+                <p class="upload-zone__status" id="uploadStatus">Uploading…</p>
+                <div class="progress-bar" id="progressBarWrap">
+                    <div class="progress-bar__fill" id="progressBarFill"></div>
+                </div>
+            </div>
+
+            <input type="file" id="fileInput" accept=".parquet" hidden>
+        </section>
+
+        <!-- Results Panel -->
+        <section class="results hidden" id="results">
+            <!-- Stats Grid -->
+            <div class="stats" id="statsGrid">
+                <div class="stat-card" id="statRows">
+                    <span class="stat-card__value" id="statRowsValue">—</span>
+                    <span class="stat-card__label">Rows</span>
+                </div>
+                <div class="stat-card" id="statCols">
+                    <span class="stat-card__value" id="statColsValue">—</span>
+                    <span class="stat-card__label">Columns</span>
+                </div>
+                <div class="stat-card" id="statParquetSize">
+                    <span class="stat-card__value" id="statParquetSizeValue">—</span>
+                    <span class="stat-card__label">Parquet Size</span>
+                </div>
+                <div class="stat-card" id="statJsonSize">
+                    <span class="stat-card__value" id="statJsonSizeValue">—</span>
+                    <span class="stat-card__label">JSON Size</span>
+                </div>
+            </div>
+
+            <!-- Schema Table -->
+            <div class="schema-panel" id="schemaPanel">
+                <div class="panel-header">
+                    <h3 class="panel-header__title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>
+                        </svg>
+                        Schema
+                    </h3>
+                </div>
+                <div class="schema-table-wrap">
+                    <table class="schema-table" id="schemaTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Column</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schemaBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- JSON Preview -->
+            <div class="preview-panel" id="previewPanel">
+                <div class="panel-header">
+                    <h3 class="panel-header__title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+                        </svg>
+                        JSON Preview <span class="preview-badge">First 5 rows</span>
+                    </h3>
+                </div>
+                <pre class="preview-code" id="previewCode"></pre>
+            </div>
+
+            <!-- Download Button -->
+            <div class="download-section" id="downloadSection">
+                <button class="btn-download" id="btnDownload" type="button">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    <span id="btnDownloadText">Download JSON</span>
+                </button>
+                <button class="btn-reset" id="btnReset" type="button">Convert another file</button>
+            </div>
+        </section>
+
+        <!-- Error Panel -->
+        <section class="error-panel hidden" id="errorPanel">
+            <div class="error-panel__icon">✕</div>
+            <p class="error-panel__message" id="errorMessage"></p>
+            <button class="btn-reset" id="btnErrorReset" type="button">Try again</button>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Files are processed on-server and automatically deleted after conversion.</p>
+    </footer>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

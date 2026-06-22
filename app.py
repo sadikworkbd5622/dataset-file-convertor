@@ -8,7 +8,8 @@ import uuid
 from collections import deque
 from concurrent.futures import ThreadPoolExecutor
 
-from flask import Flask, request, jsonify, send_file, render_template
+from flask import Flask, request, jsonify, send_file
+from flask_cors import CORS
 
 from config import Config
 from services.converter import process_file
@@ -19,7 +20,8 @@ from services.formats import (
     get_accept_string,
 )
 
-app = Flask(__name__, static_folder="static", template_folder="templates")
+app = Flask(__name__)
+CORS(app)
 app.config.from_object(Config)
 
 # In-memory task tracker and background thread pool
@@ -54,10 +56,6 @@ def run_conversion_task(task_id, input_path, output_path, original_name, job_id,
 
 
 # ──── Routes ────
-
-@app.route("/")
-def index():
-    return render_template("index.html")
 
 
 @app.route("/api/formats")

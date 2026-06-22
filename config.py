@@ -1,13 +1,25 @@
+"""
+Application Configuration
+"""
+
 import os
 
+
 class Config:
+    # Maximum upload size: 500 MB
     MAX_CONTENT_LENGTH = int(os.environ.get("MAX_CONTENT_LENGTH", 500 * 1024 * 1024))
+
+    # Directories for temporary file storage
     UPLOAD_DIR = os.environ.get("UPLOAD_DIR", os.path.join(os.path.dirname(__file__), "uploads"))
     OUTPUT_DIR = os.environ.get("OUTPUT_DIR", os.path.join(os.path.dirname(__file__), "outputs"))
-    CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379/0")
-    CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379/0")
-    GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 
-# Ensure directories exist
+    # Max files in a single batch conversion
+    MAX_BATCH_FILES = int(os.environ.get("MAX_BATCH_FILES", 5))
+
+    # Max recent conversions to keep in history
+    MAX_HISTORY = int(os.environ.get("MAX_HISTORY", 20))
+
+
+# Ensure directories exist on import
 os.makedirs(Config.UPLOAD_DIR, exist_ok=True)
 os.makedirs(Config.OUTPUT_DIR, exist_ok=True)

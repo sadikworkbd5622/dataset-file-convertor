@@ -4,7 +4,9 @@ const nextConfig = {
     // Remove trailing slash if the user accidentally added one in Vercel (e.g. https://backend.onrender.com/)
     const apiUrl = process.env.API_URL 
       ? process.env.API_URL.replace(/\/$/, '') 
-      : 'http://127.0.0.1:5000';
+      : (process.env.NODE_ENV === 'production'
+          ? 'https://dataforge-backend-pqyu.onrender.com'
+          : 'http://127.0.0.1:5000');
 
     return [
       {

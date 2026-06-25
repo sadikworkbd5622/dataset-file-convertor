@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="dataforge-mark" x1="12" y1="8" x2="52" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#a29bfe"/>
+      <stop offset="0.5" stop-color="#6c5ce7"/>
+      <stop offset="1" stop-color="#00cec9"/>
+    </linearGradient>
+    <filter id="soft-glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.424 0 0 0 0 0.361 0 0 0 0 0.906 0 0 0 .55 0"/>
+      <feBlend in="SourceGraphic" mode="screen"/>
+    </filter>
+  </defs>
+  <rect width="64" height="64" rx="18" fill="#07080d"/>
+  <path d="M18 18h18c10.5 0 18 6.4 18 14s-7.5 14-18 14H18V18Z" fill="url(#dataforge-mark)" filter="url(#soft-glow)"/>
+  <path d="M28 26h8c4.6 0 8 2.5 8 6s-3.4 6-8 6h-8V26Z" fill="#07080d" opacity=".86"/>
+  <path d="M14 50h36" stroke="#00cec9" stroke-width="3" stroke-linecap="round" opacity=".72"/>
+</svg>

@@ -16,6 +16,11 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata = {
   title: "DataForge — Universal Dataset Converter",
   description: "Convert between 13+ dataset formats instantly. CSV, JSON, Parquet, Excel, XML, YAML, SQLite, and more — all in your browser.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({ children }) {

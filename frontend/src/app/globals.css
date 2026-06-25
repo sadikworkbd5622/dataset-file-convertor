@@ -1360,7 +1360,6 @@ code, pre {
 }
 
 .footer__column--contact a {
-  color: var(--accent-light);
   overflow-wrap: anywhere;
 }
 
@@ -3714,10 +3713,6 @@ html[data-theme="dark"] .footer__column a:hover {
   color: #ffffff;
 }
 
-html[data-theme="dark"] .footer__column--contact a {
-  color: #a7c0ff;
-}
-
 html[data-theme="dark"] .conversion-animation__from,
 html[data-theme="dark"] .conversion-badge__from,
 html[data-theme="dark"] .history-item__format--from {
@@ -4092,10 +4087,6 @@ html[data-theme="light"] .footer__bottom {
 
 html[data-theme="light"] .footer__column a:hover {
   color: var(--ink);
-}
-
-html[data-theme="light"] .footer__column--contact a {
-  color: var(--brand);
 }
 
 html[data-theme="light"] .upload-zone__format-tag,

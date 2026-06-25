@@ -4322,6 +4322,10 @@ html[data-theme="light"] .footer__brand {
   -webkit-text-fill-color: currentColor;
 }
 
+html[data-theme="light"] .footer__description {
+  color: #475569 !important;
+}
+
 html[data-theme="light"] .footer__column h2 {
   color: var(--ink);
 }

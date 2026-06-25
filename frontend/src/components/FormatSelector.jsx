@@ -19,9 +19,12 @@ export default function FormatSelector({ formats, source, target, onSourceChange
   const readableFormats = formats.filter(f => f.can_read);
   const writableFormats = formats.filter(f => f.can_write);
 
-  const getSourceIcon = () => source === "auto" ? "🔍" : (formats.find(f => f.id === source)?.icon || "📁");
+  const getFormatCode = (formatId) => {
+    if (formatId === "auto") return "AUTO";
+    return (formatId || "file").slice(0, 4).toUpperCase();
+  };
+
   const getSourceName = () => source === "auto" ? "Auto-detect" : (formats.find(f => f.id === source)?.name || source);
-  const getTargetIcon = () => formats.find(f => f.id === target)?.icon || "🔶";
   const getTargetName = () => formats.find(f => f.id === target)?.name || target;
 
   return (
@@ -37,7 +40,7 @@ export default function FormatSelector({ formats, source, target, onSourceChange
           </label>
           <div className={`custom-select ${sourceOpen ? "open" : ""}`} ref={sourceRef} onClick={() => setSourceOpen(!sourceOpen)}>
             <button className="custom-select__trigger" type="button">
-              <span className="custom-select__icon">{getSourceIcon()}</span>
+              <span className="custom-select__icon">{getFormatCode(source)}</span>
               <span className="custom-select__text">{getSourceName()}</span>
               <svg className="custom-select__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <polyline points="6 9 12 15 18 9"/>
@@ -49,7 +52,7 @@ export default function FormatSelector({ formats, source, target, onSourceChange
                 className={`custom-select__option ${source === "auto" ? "active" : ""}`} 
                 onClick={(e) => { e.stopPropagation(); onSourceChange("auto"); setSourceOpen(false); }}
               >
-                <span className="custom-select__option-icon">🔍</span>
+                <span className="custom-select__option-icon">AUTO</span>
                 <span className="custom-select__option-info">
                   <span className="custom-select__option-name">Auto-detect</span>
                   <span className="custom-select__option-desc">Detect from file extension</span>
@@ -65,7 +68,7 @@ export default function FormatSelector({ formats, source, target, onSourceChange
                     if(fmt.available) { onSourceChange(fmt.id); setSourceOpen(false); }
                   }}
                 >
-                  <span className="custom-select__option-icon">{fmt.icon}</span>
+                  <span className="custom-select__option-icon">{getFormatCode(fmt.id)}</span>
                   <span className="custom-select__option-info">
                     <span className="custom-select__option-name">{fmt.name}</span>
                     <span className="custom-select__option-desc">{fmt.description}</span>
@@ -95,7 +98,7 @@ export default function FormatSelector({ formats, source, target, onSourceChange
           </label>
           <div className={`custom-select ${targetOpen ? "open" : ""}`} ref={targetRef} onClick={() => setTargetOpen(!targetOpen)}>
             <button className="custom-select__trigger" type="button">
-              <span className="custom-select__icon">{getTargetIcon()}</span>
+              <span className="custom-select__icon">{getFormatCode(target)}</span>
               <span className="custom-select__text">{getTargetName()}</span>
               <svg className="custom-select__arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <polyline points="6 9 12 15 18 9"/>
@@ -112,7 +115,7 @@ export default function FormatSelector({ formats, source, target, onSourceChange
                     if(fmt.available) { onTargetChange(fmt.id); setTargetOpen(false); }
                   }}
                 >
-                  <span className="custom-select__option-icon">{fmt.icon}</span>
+                  <span className="custom-select__option-icon">{getFormatCode(fmt.id)}</span>
                   <span className="custom-select__option-info">
                     <span className="custom-select__option-name">{fmt.name}</span>
                     <span className="custom-select__option-desc">{fmt.description}</span>

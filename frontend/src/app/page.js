@@ -17,6 +17,7 @@ export default function Home() {
   const [targetFormat, setTargetFormat] = useState("json");
   const [theme, setTheme] = useState("light");
   const [themeReady, setThemeReady] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   
   const [isConverting, setIsConverting] = useState(false);
   const [uploadStatus, setUploadStatus] = useState("");
@@ -141,6 +142,14 @@ export default function Home() {
     setTheme(current => current === "dark" ? "light" : "dark");
   };
 
+  const handleMobileNavToggle = () => {
+    setMobileNavOpen(current => !current);
+  };
+
+  const handleMobileNavClose = () => {
+    setMobileNavOpen(false);
+  };
+
   const handleSampleUpload = () => {
     const sampleCsv = [
       "order_id,region,revenue,status",
@@ -159,7 +168,13 @@ export default function Home() {
     <>
       <ToastContainer toasts={toasts} />
       <main className="container" data-theme-ready={themeReady}>
-        <Header theme={theme} onToggleTheme={handleThemeToggle} />
+        <Header
+          theme={theme}
+          mobileNavOpen={mobileNavOpen}
+          onMobileNavClose={handleMobileNavClose}
+          onMobileNavToggle={handleMobileNavToggle}
+          onToggleTheme={handleThemeToggle}
+        />
 
         <section className="converter-panel" id="formats" aria-label="Dataset converter">
           <div className="converter-panel__header">

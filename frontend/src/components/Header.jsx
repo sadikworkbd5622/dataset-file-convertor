@@ -1,4 +1,10 @@
-export default function Header({ theme, onToggleTheme }) {
+export default function Header({
+  theme,
+  mobileNavOpen,
+  onMobileNavClose,
+  onMobileNavToggle,
+  onToggleTheme,
+}) {
   return (
     <header className="header" id="header">
       <div className="header__nav" aria-label="Product identity">
@@ -6,12 +12,26 @@ export default function Header({ theme, onToggleTheme }) {
           <span className="header__mark" aria-hidden="true">DF</span>
           <span className="header__wordmark">DataForge</span>
         </div>
-        <nav className="header__nav-links" aria-label="Product highlights">
-          <a href="#formats">Formats</a>
-          <a href="#preview">Preview</a>
-          <a href="#export">Export</a>
+        <nav
+          className={`header__nav-links ${mobileNavOpen ? "is-open" : ""}`}
+          aria-label="Product highlights"
+        >
+          <a href="#formats" onClick={onMobileNavClose}>Formats</a>
+          <a href="#preview" onClick={onMobileNavClose}>Preview</a>
+          <a href="#export" onClick={onMobileNavClose}>Export</a>
         </nav>
-        <button className="theme-toggle" type="button" onClick={onToggleTheme}>
+        <button
+          className="mobile-nav-toggle"
+          type="button"
+          aria-expanded={mobileNavOpen}
+          aria-label="Toggle navigation menu"
+          onClick={onMobileNavToggle}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <button className="theme-toggle theme-toggle--desktop" type="button" onClick={onToggleTheme}>
           <span>{theme === "dark" ? "Light" : "Dark"} mode</span>
         </button>
       </div>

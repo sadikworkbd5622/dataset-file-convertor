@@ -264,8 +264,57 @@ export default function Home() {
       </main>
 
       <footer className="footer">
-        <p>Files are processed on-server and automatically deleted after conversion.</p>
-        <p className="footer__brand">DataForge — Universal Dataset Converter</p>
+        <div className="footer__inner">
+          <div className="footer__brand-block">
+            <div className="footer__brand-row">
+              <span className="footer__mark" aria-hidden="true">DF</span>
+              <div>
+                <p className="footer__brand">DataForge</p>
+                <p className="footer__creator">by Hanjala Habib Sadik</p>
+              </div>
+            </div>
+            <p className="footer__description">
+              Universal dataset converter for CSV, JSON, Parquet, Excel, XML,
+              YAML, SQLite, and more.
+            </p>
+            <p className="footer__privacy">
+              Files are processed on-server and automatically deleted after conversion.
+            </p>
+          </div>
+
+          <div className="footer__columns">
+            <nav className="footer__column" aria-label="Product links">
+              <h2>Product</h2>
+              <a href="#formats">Formats</a>
+              <a href="#preview">Preview</a>
+              <a href="#export">Export history</a>
+            </nav>
+
+            <nav className="footer__column" aria-label="Creator profiles">
+              <h2>Creator</h2>
+              <a href="https://github.com/sadikworkbd5622" target="_blank" rel="noreferrer">
+                GitHub
+              </a>
+              <a href="https://www.linkedin.com/in/hanjala-habib-sadik/" target="_blank" rel="noreferrer">
+                LinkedIn
+              </a>
+              <a href="https://www.hanjalahabibsadik.me/" target="_blank" rel="noreferrer">
+                Portfolio
+              </a>
+            </nav>
+
+            <div className="footer__column footer__column--contact">
+              <h2>Contact</h2>
+              <a href="mailto:sadik.work.bd@gmail.com">sadik.work.bd@gmail.com</a>
+              <span>Dhaka, Bangladesh</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="footer__bottom">
+          <span>© 2026 DataForge. All rights reserved.</span>
+          <span>Built for fast, practical dataset conversion.</span>
+        </div>
       </footer>
     </>
   );

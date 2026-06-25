@@ -1364,6 +1364,23 @@ code, pre {
   overflow-wrap: anywhere;
 }
 
+.footer__gmail-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-hover);
+  font-weight: 750;
+}
+
+.footer__gmail-btn:hover {
+  transform: none !important;
+}
+
 .footer__bottom {
   display: flex;
   align-items: center;
@@ -3718,6 +3735,17 @@ html[data-theme="dark"] .footer__column--contact a {
   color: #a7c0ff;
 }
 
+html[data-theme="dark"] .footer__gmail-btn {
+  color: #07111f;
+  background: #a7c0ff;
+  border-color: #a7c0ff;
+}
+
+html[data-theme="dark"] .footer__gmail-btn:hover {
+  color: #07111f;
+  background: #bfceff;
+}
+
 html[data-theme="dark"] .conversion-animation__from,
 html[data-theme="dark"] .conversion-badge__from,
 html[data-theme="dark"] .history-item__format--from {
@@ -4096,6 +4124,19 @@ html[data-theme="light"] .footer__column a:hover {
 
 html[data-theme="light"] .footer__column--contact a {
   color: var(--brand);
+}
+
+html[data-theme="light"] .footer__gmail-btn {
+  color: #ffffff;
+  background: var(--brand);
+  border-color: var(--brand);
+  box-shadow: 0 10px 22px rgba(29, 78, 216, .18);
+}
+
+html[data-theme="light"] .footer__gmail-btn:hover {
+  color: #ffffff;
+  background: var(--brand-dark);
+  border-color: var(--brand-dark);
 }
 
 html[data-theme="light"] .upload-zone__format-tag,

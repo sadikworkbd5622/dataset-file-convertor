@@ -4328,7 +4328,7 @@ html[data-theme="light"] .header__subtitle {
 @media (max-width: 720px) {
   .header__nav {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     align-items: center;
     gap: 14px;
     margin-bottom: 34px;
@@ -4417,10 +4417,7 @@ html[data-theme="light"] .header__subtitle {
   }
 
   .header__nav-links .theme-toggle {
-    margin-top: 4px;
-    padding: 0 18px;
-    font-size: 1rem;
-    width: 100%;
+    display: none;
   }
 
   .theme-toggle {
@@ -4428,15 +4425,17 @@ html[data-theme="light"] .header__subtitle {
   }
 
   .theme-toggle--desktop {
-    display: none;
+    display: inline-flex;
+    grid-column: 2;
+    grid-row: 1;
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 12px;
+    font-size: .86rem;
   }
 
   .theme-toggle--mobile {
-    display: inline-flex;
-    justify-content: center;
-    flex: none;
-    min-height: 52px;
-    border-radius: 14px;
+    display: none;
   }
 
   .mobile-nav-toggle {
@@ -4452,6 +4451,8 @@ html[data-theme="light"] .header__subtitle {
     border-radius: 12px;
     background: transparent;
     cursor: pointer;
+    grid-column: 3;
+    grid-row: 1;
   }
 
   .mobile-nav-toggle span {
@@ -4515,10 +4516,11 @@ html[data-theme="light"] .header__subtitle {
     background: var(--surface-soft);
   }
 
-  html[data-theme="light"] .header__nav-links .theme-toggle {
-    color: #ffffff;
-    background: var(--brand);
-    border-color: var(--brand);
+  html[data-theme="light"] .header__nav-links {
+    color: var(--ink);
+    background: var(--surface);
+    border-color: var(--line);
+    box-shadow: var(--shadow-sm);
   }
 
   html[data-theme="dark"] .header__nav {
@@ -4560,10 +4562,10 @@ html[data-theme="light"] .header__subtitle {
     background: rgba(30, 41, 59, .72);
   }
 
-  html[data-theme="dark"] .header__nav-links .theme-toggle {
-    color: #07111f;
-    background: #10b981;
-    border-color: #10b981;
+  html[data-theme="dark"] .header__nav-links {
+    background: rgba(15, 23, 42, .82);
+    border-color: rgba(148, 163, 184, .22);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, .28);
   }
 }
 
@@ -4572,7 +4574,7 @@ html[data-theme="light"] .header__subtitle {
     font-size: 1.35rem;
   }
 
-  .header__nav-links .theme-toggle {
+  .theme-toggle--desktop {
     min-height: 32px;
     padding: 0 9px;
     font-size: .78rem;

@@ -2545,6 +2545,22 @@ body {
   z-index: 1;
 }
 
+.converter-panel .format-selector {
+  z-index: 30;
+}
+
+.converter-panel .custom-select.open {
+  z-index: 40;
+}
+
+.converter-panel .custom-select.open .custom-select__dropdown {
+  z-index: 50;
+}
+
+.converter-panel .upload-zone {
+  z-index: 1;
+}
+
 .converter-panel__header {
   display: flex;
   align-items: flex-start;

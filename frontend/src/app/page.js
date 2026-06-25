@@ -306,7 +306,6 @@ export default function Home() {
             <div className="footer__column footer__column--contact">
               <h2>Contact</h2>
               <a
-                className="footer__gmail-btn"
                 href="https://mail.google.com/mail/?view=cm&fs=1&to=sadik.work.bd@gmail.com"
                 target="_blank"
                 rel="noreferrer"

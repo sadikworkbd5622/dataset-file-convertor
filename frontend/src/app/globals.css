@@ -4346,36 +4346,25 @@ html[data-theme="light"] .header__subtitle {
   }
 
   .header__mark {
-    display: none;
+    display: inline-flex;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    font-size: .92rem;
+    font-weight: 850;
+    letter-spacing: .04em;
   }
 
   .header__wordmark {
-    display: inline-flex;
-    align-items: center;
-    color: var(--text-primary);
-    font-size: 1.65rem;
-    font-weight: 850;
-    letter-spacing: -.055em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    display: none;
   }
 
   .header__wordmark::before {
-    content: "<";
-    color: var(--cyan);
-    margin-right: 2px;
+    content: none;
   }
 
   .header__wordmark::after {
-    content: "/>";
-    position: static;
-    width: auto;
-    height: auto;
-    margin-left: 2px;
-    border-radius: 0;
-    color: var(--cyan);
-    background: none;
+    content: none;
   }
 
   .header__nav-links {
@@ -4486,6 +4475,12 @@ html[data-theme="light"] .header__subtitle {
     color: var(--ink);
   }
 
+  html[data-theme="light"] .header__mark {
+    color: #ffffff;
+    background: linear-gradient(135deg, #1d4ed8, #0f766e);
+    box-shadow: 0 10px 22px rgba(29, 78, 216, .18);
+  }
+
   html[data-theme="light"] .header__nav-links a {
     color: var(--ink-soft);
     background: transparent;
@@ -4531,6 +4526,12 @@ html[data-theme="light"] .header__subtitle {
 
   html[data-theme="dark"] .header__wordmark {
     color: #ffffff;
+  }
+
+  html[data-theme="dark"] .header__mark {
+    color: #07111f;
+    background: linear-gradient(135deg, #7aa2ff, #5eead4);
+    box-shadow: 0 10px 24px rgba(122, 162, 255, .22);
   }
 
   html[data-theme="dark"] .header__nav-links a {
@@ -4595,15 +4596,17 @@ html[data-theme="light"] .header__brand {
   gap: 9px;
 }
 
-html[data-theme="light"] .header__mark {
-  width: 30px;
-  height: 30px;
-  border-radius: 9px;
-  color: #ffffff;
-  background: linear-gradient(135deg, #1d4ed8, #0f766e);
-  box-shadow: 0 8px 18px rgba(29, 78, 216, .18);
-  font-size: .68rem;
-  line-height: 1;
+@media (min-width: 721px) {
+  html[data-theme="light"] .header__mark {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #1d4ed8, #0f766e);
+    box-shadow: 0 8px 18px rgba(29, 78, 216, .18);
+    font-size: .68rem;
+    line-height: 1;
+  }
 }
 
 html[data-theme="light"] .header__wordmark::after {

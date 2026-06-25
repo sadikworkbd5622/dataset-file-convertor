@@ -8,7 +8,6 @@ import ConversionResults from "@/components/ConversionResults";
 import ConversionHistory from "@/components/ConversionHistory";
 import ErrorPanel from "@/components/ErrorPanel";
 import ToastContainer, { useToast } from "@/components/Toast";
-import ParticleCanvas from "@/components/ParticleCanvas";
 
 import { fetchFormats, uploadFile, pollStatus } from "@/lib/api";
 
@@ -16,6 +15,8 @@ export default function Home() {
   const [formats, setFormats] = useState([]);
   const [sourceFormat, setSourceFormat] = useState("auto");
   const [targetFormat, setTargetFormat] = useState("json");
+  const [theme, setTheme] = useState("light");
+  const [themeReady, setThemeReady] = useState(false);
   
   const [isConverting, setIsConverting] = useState(false);
   const [uploadStatus, setUploadStatus] = useState("");
@@ -48,7 +49,20 @@ export default function Home() {
     }
   }, []);
 
-  const handleUpload = async (file) => {
+  useEffect(() => {
+    const storedTheme = localStorage.getItem("df_theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setTheme(storedTheme || (prefersDark ? "dark" : "light"));
+    setThemeReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!themeReady) return;
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("df_theme", theme);
+  }, [theme, themeReady]);
+
+  const handleUpload = async (file, sourceOverride = sourceFormat, targetOverride = targetFormat) => {
     setUploadedFileName(file.name);
     setIsConverting(true);
     setJobResult(null);
@@ -57,7 +71,7 @@ export default function Home() {
     setProgressPct(10);
 
     try {
-      const data = await uploadFile(file, sourceFormat, targetFormat);
+      const data = await uploadFile(file, sourceOverride, targetOverride);
       setProgressPct(40);
       setUploadStatus("Processing...");
       
@@ -123,59 +137,130 @@ export default function Home() {
     showToast("History cleared", "info");
   };
 
+  const handleThemeToggle = () => {
+    setTheme(current => current === "dark" ? "light" : "dark");
+  };
+
+  const handleSampleUpload = () => {
+    const sampleCsv = [
+      "order_id,region,revenue,status",
+      "1001,North,12450,paid",
+      "1002,West,8420,pending",
+      "1003,South,18620,paid",
+      "1004,East,5920,refunded",
+    ].join("\n");
+    const sampleFile = new File([sampleCsv], "dataforge_sample.csv", { type: "text/csv" });
+    setSourceFormat("auto");
+    setTargetFormat("json");
+    handleUpload(sampleFile, "auto", "json");
+  };
+
   return (
     <>
-      <ParticleCanvas />
       <ToastContainer toasts={toasts} />
-      <main className="container">
-        <Header />
-        
-        {!jobResult && (
-          <FormatSelector 
-            formats={formats} 
-            source={sourceFormat} 
-            target={targetFormat} 
-            onSourceChange={setSourceFormat} 
-            onTargetChange={setTargetFormat} 
+      <main className="container" data-theme-ready={themeReady}>
+        <Header theme={theme} onToggleTheme={handleThemeToggle} />
+
+        <section className="converter-panel" id="formats" aria-label="Dataset converter">
+          <div className="converter-panel__header">
+            <div>
+              <span className="converter-panel__eyebrow">Conversion desk</span>
+              <h2>Prepare your file</h2>
+            </div>
+            <div className="converter-panel__actions">
+              <button className="sample-demo-btn" type="button" onClick={handleSampleUpload} disabled={isConverting}>
+                Try sample data
+              </button>
+              <span className="converter-panel__note">Auto-detect available</span>
+            </div>
+          </div>
+
+          {!jobResult && (
+            <FormatSelector 
+              formats={formats} 
+              source={sourceFormat} 
+              target={targetFormat} 
+              onSourceChange={setSourceFormat} 
+              onTargetChange={setTargetFormat} 
+            />
+          )}
+
+          {!jobResult && !error && (
+            <UploadZone 
+              formats={formats} 
+              sourceFormat={sourceFormat} 
+              targetFormat={targetFormat}
+              isConverting={isConverting}
+              onUpload={handleUpload}
+            />
+          )}
+
+          <UploadProgress 
+              isConverting={isConverting}
+              sourceFormat={sourceFormat}
+              targetFormat={targetFormat}
+              uploadStatus={uploadStatus}
+              progressPct={progressPct}
+              formats={formats}
+              uploadedFileName={uploadedFileName}
           />
-        )}
 
-        {!jobResult && !error && (
-          <UploadZone 
+          <ConversionResults 
+            job={jobResult} 
             formats={formats} 
-            sourceFormat={sourceFormat} 
-            targetFormat={targetFormat}
-            isConverting={isConverting}
-            onUpload={handleUpload}
+            onReset={handleReset} 
           />
-        )}
 
-        <UploadProgress 
-            isConverting={isConverting}
-            sourceFormat={sourceFormat}
-            targetFormat={targetFormat}
-            uploadStatus={uploadStatus}
-            progressPct={progressPct}
-            formats={formats}
-            uploadedFileName={uploadedFileName}
-        />
+          <ErrorPanel 
+            error={error} 
+            onReset={handleReset} 
+          />
+        </section>
 
-        <ConversionResults 
-          job={jobResult} 
-          formats={formats} 
-          onReset={handleReset} 
-        />
+        <section className="how-it-works" id="preview" aria-label="How DataForge works">
+          <div className="section-heading">
+            <span>Workflow</span>
+            <h2>From upload to clean output in three steps.</h2>
+          </div>
+          <div className="info-grid">
+            <article className="info-card">
+              <span className="info-card__step">01</span>
+              <h3>Upload</h3>
+              <p>Drop in a dataset and let DataForge detect the source format automatically.</p>
+            </article>
+            <article className="info-card">
+              <span className="info-card__step">02</span>
+              <h3>Review</h3>
+              <p>Preview schema, row counts, columns, and conversion metadata before download.</p>
+            </article>
+            <article className="info-card">
+              <span className="info-card__step">03</span>
+              <h3>Export</h3>
+              <p>Download a ready-to-use file in your selected output format.</p>
+            </article>
+          </div>
+        </section>
 
-        <ErrorPanel 
-          error={error} 
-          onReset={handleReset} 
-        />
+        <section className="trust-panel" aria-label="Privacy and reliability">
+          <div>
+            <span className="trust-panel__eyebrow">Privacy first</span>
+            <h2>Built for practical data handoffs.</h2>
+            <p>Files are processed on the server for conversion and automatically removed after the job completes.</p>
+          </div>
+          <ul>
+            <li>Temporary conversion storage</li>
+            <li>No account required for local use</li>
+            <li>Clear schema and preview output</li>
+          </ul>
+        </section>
 
-        <ConversionHistory 
-          history={history} 
-          formats={formats} 
-          onClearHistory={handleClearHistory} 
-        />
+        <section id="export">
+          <ConversionHistory 
+            history={history} 
+            formats={formats} 
+            onClearHistory={handleClearHistory} 
+          />
+        </section>
       </main>
 
       <footer className="footer">
